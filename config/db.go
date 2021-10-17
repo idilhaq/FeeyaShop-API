@@ -3,7 +3,6 @@ package config
 import (
 	"database/sql"
 	"feeyashop/models"
-	"feeyashop/utils"
 	"fmt"
 	"os"
 
@@ -32,7 +31,7 @@ func MySQL() (*sql.DB, error) {
 }
 
 func ConnectDataBase() *gorm.DB {
-	environment := utils.Getenv("ENVIRONMENT", "development")
+	environment := os.Getenv("ENVIRONMENT")
 
 	if environment == "production" {
 		username := os.Getenv("DATABASE_USERNAME")
