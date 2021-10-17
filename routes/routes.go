@@ -24,6 +24,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 	// Category
 	r.GET("/category", controller.GetAllCategory)
+	r.GET("/category/:id", controller.GetProductsByCategoryId)
 	categoryMiddlewareRoute := r.Group("/category")
 	categoryMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
 	categoryMiddlewareRoute.POST("/", controller.CreateCategory)
@@ -31,16 +32,12 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	categoryMiddlewareRoute.DELETE("/:id", controller.DeleteCategory)
 
 	// Product
-	// r.GET("/product", controllers.GetAllProduct)
-	// r.POST("/product/create", controllers.PostProduct)
-	// r.PUT("/product/:id/update", controllers.UpdateProduct)
-	// r.DELETE("/product/:id/delete", controllers.DeleteProduct)
-
-	// productMiddlewareRoute := r.Group("/product")
-	// productMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
-	// productMiddlewareRoute.POST("/", controllers.CreateProduct)
-	// productMiddlewareRoute.PATCH("/:id", controllers.UpdateProduct)
-	// productMiddlewareRoute.DELETE("/:id", controllers.DeleteProduct)
+	r.GET("/product", controller.GetAllProduct)
+	productMiddlewareRoute := r.Group("/product")
+	productMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	productMiddlewareRoute.POST("/", controller.CreateProduct)
+	productMiddlewareRoute.PATCH("/:id", controller.UpdateProduct)
+	productMiddlewareRoute.DELETE("/:id", controller.DeleteProduct)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

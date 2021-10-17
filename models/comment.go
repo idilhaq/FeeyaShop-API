@@ -2,11 +2,11 @@ package models
 
 import "time"
 
-type Rating struct {
+type Comment struct {
 	ID        uint      `json:"id"`
-	Rating    string    `json:"rating"`
-	UserID    string    `json:"user_id"`
-	ProductID string    `json:"product_id"`
+	Comment   string    `json:"comment"`
+	UserID    uint      `json:"user_id"`
+	ProductID uint      `json:"product_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Product   Product   `json:"-"`

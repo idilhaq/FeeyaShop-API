@@ -1,5 +1,5 @@
 definitions:
-  controllers.LoginInput:
+  controller.LoginInput:
     properties:
       password:
         type: string
@@ -9,7 +9,7 @@ definitions:
     - password
     - username
     type: object
-  controllers.RegisterInput:
+  controller.RegisterInput:
     properties:
       email:
         type: string
@@ -22,10 +22,21 @@ definitions:
     - password
     - username
     type: object
-  controllers.categoryInput:
+  controller.categoryInput:
     properties:
       name:
         type: string
+    type: object
+  controller.productInput:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
     type: object
   models.Category:
     properties:
@@ -88,7 +99,7 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/controllers.categoryInput'
+          $ref: '#/definitions/controller.categoryInput'
       - default: Bearer
         description: Insert your access token
         in: header
@@ -169,7 +180,7 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/controllers.categoryInput'
+          $ref: '#/definitions/controller.categoryInput'
       - default: Bearer
         description: Insert your access token
         in: header
@@ -197,7 +208,7 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/controllers.LoginInput'
+          $ref: '#/definitions/controller.LoginInput'
       produces:
       - application/json
       responses:
@@ -209,6 +220,109 @@ paths:
       summary: Login as as user.
       tags:
       - Auth
+  /product:
+    get:
+      description: Get a list of Product.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      summary: Get all Product.
+      tags:
+      - Product
+    post:
+      description: Creating a new Product.
+      parameters:
+      - description: the body to create a new Product
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.productInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Product.
+      tags:
+      - Product
+  /product/{id}:
+    delete:
+      description: Delete a Product by id.
+      parameters:
+      - description: Product id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Product.
+      tags:
+      - Product
+    patch:
+      description: Update Product by id.
+      parameters:
+      - description: Product id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update product
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.productInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Product.
+      tags:
+      - Product
   /register:
     post:
       description: registering a user from public access.
@@ -218,7 +332,7 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/controllers.RegisterInput'
+          $ref: '#/definitions/controller.RegisterInput'
       produces:
       - application/json
       responses:

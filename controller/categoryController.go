@@ -30,6 +30,27 @@ func GetAllCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": categories})
 }
 
+// GetProductByCategoryId godoc
+// @Summary Get Products.
+// @Description Get all Products by CategoryId.
+// @Tags Category
+// @Produce json
+// @Param id path string true "Category id"
+// @Success 200 {object} []models.Product
+// @Router /category/{id} [get]
+func GetProductsByCategoryId(c *gin.Context) { // Get model if exist
+	var categories []models.Category
+
+	db := c.MustGet("db").(*gorm.DB)
+
+	if err := db.Where("category_id = ?", c.Param("id")).Find(&categories).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": categories})
+}
+
 // CreateCategory godoc
 // @Summary Create New Category.
 // @Description Creating a new Category.
@@ -54,27 +75,6 @@ func CreateCategory(c *gin.Context) {
 	db.Create(&category)
 
 	c.JSON(http.StatusOK, gin.H{"data": category})
-}
-
-// GetProductByCategoryId godoc
-// @Summary Get Products.
-// @Description Get all Products by CategoryId.
-// @Tags Category
-// @Produce json
-// @Param id path string true "Category id"
-// @Success 200 {object} []models.Product
-// @Router /category/{id} [get]
-func GetProductsByCategoryId(c *gin.Context) { // Get model if exist
-	var categories []models.Category
-
-	db := c.MustGet("db").(*gorm.DB)
-
-	if err := db.Where("category_id = ?", c.Param("id")).Find(&categories).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": categories})
 }
 
 // UpdateCategory godoc

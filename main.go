@@ -25,8 +25,8 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	docs.SwaggerInfo.Title = "Swagger Example API"
-	docs.SwaggerInfo.Description = "This is a sample server Movie."
+	docs.SwaggerInfo.Title = "Feeya Shop API"
+	docs.SwaggerInfo.Description = "An open access API for resellers"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:8080"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
