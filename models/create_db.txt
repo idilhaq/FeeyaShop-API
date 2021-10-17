@@ -1,0 +1,104 @@
+CREATE TABLE role (
+  id INT auto_increment primary key,
+  role VARCHAR(255) not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null
+);
+
+CREATE TABLE user (
+  id INT auto_increment primary key,
+  name VARCHAR(255) not null,
+  email VARCHAR(255) not null,
+  password VARCHAR(255) not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null,
+  role_id INT not null
+);
+
+ALTER TABLE user
+ADD FOREIGN KEY (role_id) REFERENCES role(id);
+
+CREATE TABLE category (
+  id INT auto_increment primary key,
+  name VARCHAR(255) not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null
+);
+
+CREATE TABLE product (
+  id INT auto_increment primary key,
+  name VARCHAR(255) not null,
+  description VARCHAR(255) not null,
+  price INT not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null,
+  category_id INT not null
+);
+
+ALTER TABLE product
+ADD FOREIGN KEY (category_id) REFERENCES category(id);
+
+CREATE TABLE likes (
+  id INT auto_increment primary key,
+  created_at DATETIME not null,
+  updated_at DATETIME not null,
+  user_id INT not null,
+  product_id INT not null
+);
+
+ALTER TABLE likes
+ADD FOREIGN KEY (user_id) REFERENCES user(id),
+ADD FOREIGN KEY (product_id) REFERENCES product(id);
+
+CREATE TABLE cart (
+  id INT auto_increment primary key,
+  amount INT not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null,
+  user_id INT not null,
+  product_id INT not null
+);
+
+ALTER TABLE cart
+ADD FOREIGN KEY (user_id) REFERENCES user(id),
+ADD FOREIGN KEY (product_id) REFERENCES product(id);
+
+CREATE TABLE purchase (
+  id INT auto_increment primary key,
+  price INT not null,
+  amount INT not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null,
+  user_id INT not null,
+  product_id INT not null
+);
+
+ALTER TABLE purchase
+ADD FOREIGN KEY (user_id) REFERENCES user(id),
+ADD FOREIGN KEY (product_id) REFERENCES product(id);
+
+CREATE TABLE rating (
+  id INT auto_increment primary key,
+  rating INT not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null,
+  user_id INT not null,
+  product_id INT not null
+);
+
+ALTER TABLE rating
+ADD FOREIGN KEY (user_id) REFERENCES user(id),
+ADD FOREIGN KEY (product_id) REFERENCES product(id);
+
+CREATE TABLE comment (
+  id INT auto_increment primary key,
+  comment VARCHAR(255) not null,
+  created_at DATETIME not null,
+  updated_at DATETIME not null,
+  user_id INT not null,
+  product_id INT not null
+);
+
+ALTER TABLE comment
+ADD FOREIGN KEY (user_id) REFERENCES user(id),
+ADD FOREIGN KEY (product_id) REFERENCES product(id);

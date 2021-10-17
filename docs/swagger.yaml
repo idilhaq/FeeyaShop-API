@@ -1,0 +1,233 @@
+definitions:
+  controllers.LoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.RegisterInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  controllers.categoryInput:
+    properties:
+      name:
+        type: string
+    type: object
+  models.Category:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Product:
+    properties:
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+paths:
+  /category:
+    get:
+      description: Get a list of Category.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      summary: Get all Category.
+      tags:
+      - Category
+    post:
+      description: Creating a new Category.
+      parameters:
+      - description: the body to create a new Category
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.categoryInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Category.
+      tags:
+      - Category
+  /category/{id}:
+    delete:
+      description: Delete a Category by id.
+      parameters:
+      - description: Category id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Category.
+      tags:
+      - Category
+    get:
+      description: Get all Products by CategoryId.
+      parameters:
+      - description: Category id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      summary: Get Products.
+      tags:
+      - Category
+    patch:
+      description: Update Category by id.
+      parameters:
+      - description: Category id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update category
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.categoryInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Category.
+      tags:
+      - Category
+  /login:
+    post:
+      description: Logging in to get jwt token to access admin or user api by roles.
+      parameters:
+      - description: the body to login a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login as as user.
+      tags:
+      - Auth
+  /register:
+    post:
+      description: registering a user from public access.
+      parameters:
+      - description: the body to register a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a user.
+      tags:
+      - Auth
+swagger: "2.0"
