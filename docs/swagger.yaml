@@ -15,17 +15,45 @@ definitions:
         type: string
       password:
         type: string
+      role_id:
+        type: integer
       username:
         type: string
     required:
     - email
     - password
+    - role_id
     - username
+    type: object
+  controller.cartInput:
+    properties:
+      amount:
+        type: integer
+      product_id:
+        type: integer
+      user_id:
+        type: integer
     type: object
   controller.categoryInput:
     properties:
       name:
         type: string
+    type: object
+  controller.commentInput:
+    properties:
+      comment:
+        type: string
+      product_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  controller.likeInput:
+    properties:
+      product_id:
+        type: integer
+      user_id:
+        type: integer
     type: object
   controller.productInput:
     properties:
@@ -38,6 +66,46 @@ definitions:
       price:
         type: integer
     type: object
+  controller.purchaseInput:
+    properties:
+      amount:
+        type: integer
+      price:
+        type: integer
+      product_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  controller.ratingInput:
+    properties:
+      product_id:
+        type: integer
+      rating:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  controller.roleInput:
+    properties:
+      role:
+        type: string
+    type: object
+  models.Cart:
+    properties:
+      amount:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      product_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
   models.Category:
     properties:
       created_at:
@@ -48,6 +116,34 @@ definitions:
         type: string
       updated_at:
         type: string
+    type: object
+  models.Comment:
+    properties:
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      product_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.Like:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      product_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
     type: object
   models.Product:
     properties:
@@ -66,6 +162,66 @@ definitions:
       updated_at:
         type: string
     type: object
+  models.Purchase:
+    properties:
+      amount:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      price:
+        type: integer
+      product_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.Rating:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      product_id:
+        type: integer
+      rating:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.Role:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.User:
+    properties:
+      access_id:
+        type: integer
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact:
     email: support@swagger.io
@@ -76,6 +232,109 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
 paths:
+  /cart:
+    get:
+      description: Get a list of Cart.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Cart'
+            type: array
+      summary: Get all Cart.
+      tags:
+      - Cart
+    post:
+      description: Creating a new Cart.
+      parameters:
+      - description: the body to create a new Cart
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.cartInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Cart'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Cart.
+      tags:
+      - Cart
+  /cart/{id}:
+    delete:
+      description: Delete a Cart by id.
+      parameters:
+      - description: Cart id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Cart.
+      tags:
+      - Cart
+    patch:
+      description: Update Cart by id.
+      parameters:
+      - description: Cart id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update cart
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.cartInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Cart'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Cart.
+      tags:
+      - Cart
   /category:
     get:
       description: Get a list of Category.
@@ -199,6 +458,180 @@ paths:
       summary: Update Category.
       tags:
       - Category
+  /comment:
+    get:
+      description: Get a list of Comment.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Comment'
+            type: array
+      summary: Get all Comment.
+      tags:
+      - Comment
+    post:
+      description: Creating a new Comment.
+      parameters:
+      - description: the body to create a new Comment
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.commentInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comment'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Comment.
+      tags:
+      - Comment
+  /comment/{id}:
+    delete:
+      description: Delete a Comment by id.
+      parameters:
+      - description: Comment id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Comment.
+      tags:
+      - Comment
+    patch:
+      description: Update Comment by id.
+      parameters:
+      - description: Comment id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update comment
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.commentInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comment'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Comment.
+      tags:
+      - Comment
+  /like:
+    get:
+      description: Get a list of Like.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Like'
+            type: array
+      summary: Get all Like.
+      tags:
+      - Like
+    post:
+      description: Creating a new Like.
+      parameters:
+      - description: the body to create a new Like
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.likeInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Like'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Like.
+      tags:
+      - Like
+  /like/{id}:
+    delete:
+      description: Delete a Like by id.
+      parameters:
+      - description: Like id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Like.
+      tags:
+      - Like
   /login:
     post:
       description: Logging in to get jwt token to access admin or user api by roles.
@@ -220,6 +653,39 @@ paths:
       summary: Login as as user.
       tags:
       - Auth
+  /password/{id}:
+    patch:
+      description: Update Password by id.
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update password
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.cartInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Password.
+      tags:
+      - Password
   /product:
     get:
       description: Get a list of Product.
@@ -323,6 +789,212 @@ paths:
       summary: Update Product.
       tags:
       - Product
+  /purchase:
+    get:
+      description: Get a list of Purchase.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Purchase'
+            type: array
+      summary: Get all Purchase.
+      tags:
+      - Purchase
+    post:
+      description: Creating a new Purchase.
+      parameters:
+      - description: the body to create a new Purchase
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.purchaseInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Purchase'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Purchase.
+      tags:
+      - Purchase
+  /purchase/{id}:
+    delete:
+      description: Delete a Purchase by id.
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Purchase.
+      tags:
+      - Purchase
+    patch:
+      description: Update Purchase by id.
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update purchase
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.purchaseInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Purchase'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Purchase.
+      tags:
+      - Purchase
+  /rating:
+    get:
+      description: Get a list of Rating.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Rating'
+            type: array
+      summary: Get all Rating.
+      tags:
+      - Rating
+    post:
+      description: Creating a new Rating.
+      parameters:
+      - description: the body to create a new Rating
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ratingInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Rating'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Rating.
+      tags:
+      - Rating
+  /rating/{id}:
+    delete:
+      description: Delete a Rating by id.
+      parameters:
+      - description: Rating id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Rating.
+      tags:
+      - Rating
+    patch:
+      description: Update Rating by id.
+      parameters:
+      - description: Rating id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update rating
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ratingInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Rating'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Rating.
+      tags:
+      - Rating
   /register:
     post:
       description: registering a user from public access.
@@ -344,4 +1016,107 @@ paths:
       summary: Register a user.
       tags:
       - Auth
+  /role:
+    get:
+      description: Get a list of Role.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Role'
+            type: array
+      summary: Get all Role.
+      tags:
+      - Role
+    post:
+      description: Creating a new Role.
+      parameters:
+      - description: the body to create a new Role
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.roleInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Role'
+      security:
+      - ApiKeyAuth: []
+      summary: Create New Role.
+      tags:
+      - Role
+  /role/{id}:
+    delete:
+      description: Delete a Role by id.
+      parameters:
+      - description: Role id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one Role.
+      tags:
+      - Role
+    patch:
+      description: Update Role by id.
+      parameters:
+      - description: Role id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update role
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.roleInput'
+      - default: Bearer
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Role'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Role.
+      tags:
+      - Role
 swagger: "2.0"

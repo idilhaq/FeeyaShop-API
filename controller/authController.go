@@ -4,6 +4,7 @@ import (
 	"feeyashop/models"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -18,6 +19,11 @@ type RegisterInput struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 	Email    string `json:"email" binding:"required"`
+	RoleID   uint   `json:"role_id" binding:"required"`
+}
+
+type ChangePasswordInput struct {
+	Password string `json:"password" binding:"required"`
 }
 
 // LoginUser godoc
@@ -81,6 +87,7 @@ func Register(c *gin.Context) {
 	u.Username = input.Username
 	u.Email = input.Email
 	u.Password = input.Password
+	u.RoleID = input.RoleID
 
 	_, err := u.SaveUser(db)
 
@@ -96,4 +103,41 @@ func Register(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "registration success", "user": user})
 
+}
+
+// UpdatePassword godoc
+// @Summary Update Password.
+// @Description Update Password by id.
+// @Tags Password
+// @Produce json
+// @Param id path string true "User id"
+// @Param Body body cartInput true "the body to update password"
+// @Success 200 {object} models.User
+// @Router /password/{id} [patch]
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Insert your access token" default(Bearer )
+func ChangePassword(c *gin.Context) {
+
+	db := c.MustGet("db").(*gorm.DB)
+	// Get model if exist
+	var user models.User
+	if err := db.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	// Validate input
+	var input ChangePasswordInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var updatedInput models.User
+	updatedInput.Password = input.Password
+	updatedInput.UpdatedAt = time.Now()
+
+	db.Model(&user).Updates(updatedInput)
+
+	c.JSON(http.StatusOK, gin.H{"data": user})
 }

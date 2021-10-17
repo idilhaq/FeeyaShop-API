@@ -21,6 +21,9 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 	r.POST("/register", controller.Register)
 	r.POST("/login", controller.Login)
+	userMiddlewareRoute := r.Group("/user")
+	userMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	userMiddlewareRoute.PATCH("/:id", controller.ChangePassword)
 
 	// Category
 	r.GET("/category", controller.GetAllCategory)
@@ -38,6 +41,53 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	productMiddlewareRoute.POST("/", controller.CreateProduct)
 	productMiddlewareRoute.PATCH("/:id", controller.UpdateProduct)
 	productMiddlewareRoute.DELETE("/:id", controller.DeleteProduct)
+
+	// Role
+	r.GET("/role", controller.GetAllRole)
+	roleMiddlewareRoute := r.Group("/role")
+	roleMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	roleMiddlewareRoute.POST("/", controller.CreateRole)
+	roleMiddlewareRoute.PATCH("/:id", controller.UpdateRole)
+	roleMiddlewareRoute.DELETE("/:id", controller.DeleteRole)
+
+	// Like
+	r.GET("/like", controller.GetAllLike)
+	likeMiddlewareRoute := r.Group("/like")
+	likeMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	likeMiddlewareRoute.POST("/", controller.CreateLike)
+	likeMiddlewareRoute.DELETE("/:id", controller.DeleteLike)
+
+	// Cart
+	r.GET("/cart", controller.GetAllCart)
+	cartMiddlewareRoute := r.Group("/cart")
+	cartMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	cartMiddlewareRoute.POST("/", controller.CreateCart)
+	cartMiddlewareRoute.PATCH("/:id", controller.UpdateCart)
+	cartMiddlewareRoute.DELETE("/:id", controller.DeleteCart)
+
+	// Purchase
+	r.GET("/purchase", controller.GetAllPurchase)
+	purchaseMiddlewareRoute := r.Group("/purchase")
+	purchaseMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	purchaseMiddlewareRoute.POST("/", controller.CreatePurchase)
+	purchaseMiddlewareRoute.PATCH("/:id", controller.UpdatePurchase)
+	purchaseMiddlewareRoute.DELETE("/:id", controller.DeletePurchase)
+
+	// Rating
+	r.GET("/rating", controller.GetAllRating)
+	ratingMiddlewareRoute := r.Group("/rating")
+	ratingMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	ratingMiddlewareRoute.POST("/", controller.CreateRating)
+	ratingMiddlewareRoute.PATCH("/:id", controller.UpdateRating)
+	ratingMiddlewareRoute.DELETE("/:id", controller.DeleteRating)
+
+	// Comment
+	r.GET("/comment", controller.GetAllComment)
+	commentMiddlewareRoute := r.Group("/comment")
+	commentMiddlewareRoute.Use(middlewares.JwtAuthMiddleware())
+	commentMiddlewareRoute.POST("/", controller.CreateComment)
+	commentMiddlewareRoute.PATCH("/:id", controller.UpdateComment)
+	commentMiddlewareRoute.DELETE("/:id", controller.DeleteComment)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

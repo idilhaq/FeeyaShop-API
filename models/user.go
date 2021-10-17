@@ -15,10 +15,10 @@ type User struct {
 	Username  string     `gorm:"not null;unique" json:"username"`
 	Email     string     `json:"email"`
 	Password  string     `json:"password"`
-	AccessID  uint       `json:"access_id"`
+	RoleID    uint       `json:"access_id"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
-	Access    Access     `json:"-"`
+	Role      Role       `json:"-"`
 	Likes     []Like     `json:"-"`
 	Carts     []Cart     `json:"-"`
 	Purchases []Purchase `json:"-"`

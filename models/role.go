@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Access struct {
+type Role struct {
 	ID        uint      `json:"id"`
 	Role      string    `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
