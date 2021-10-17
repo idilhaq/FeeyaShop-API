@@ -3,10 +3,13 @@ package config
 import (
 	"database/sql"
 	"feeyashop/models"
+	"feeyashop/utils"
 	"fmt"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -29,26 +32,55 @@ func MySQL() (*sql.DB, error) {
 }
 
 func ConnectDataBase() *gorm.DB {
-	host := "tcp(127.0.0.1:3306)"
+	environment := utils.Getenv("ENVIRONMENT", "development")
 
-	dsn := fmt.Sprintf("%v:%v@%v/%v?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, database)
+	if environment == "production" {
+		username := os.Getenv("DATABASE_USERNAME")
+		password := os.Getenv("DATABASE_PASSWORD")
+		host := os.Getenv("DATABASE_HOST")
+		port := os.Getenv("DATABASE_PORT")
+		database := os.Getenv("DATABASE_NAME")
+		// production
+		dsn := "host=" + host + " user=" + username + " password=" + password + " dbname=" + database + " port=" + port + " sslmode=require"
+		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err != nil {
+			panic(err.Error())
+		}
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		db.AutoMigrate(
+			&models.Category{},
+			&models.Product{},
+			&models.User{},
+			&models.Access{},
+			&models.Cart{},
+			&models.Comment{},
+			&models.Like{},
+			&models.Purchase{},
+			&models.Rating{})
 
-	if err != nil {
-		panic(err.Error())
+		return db
+	} else {
+		// development
+		host := "tcp(127.0.0.1:3306)"
+
+		dsn := fmt.Sprintf("%v:%v@%v/%v?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, database)
+		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+		if err != nil {
+			panic(err.Error())
+		}
+
+		db.AutoMigrate(
+			&models.Category{},
+			&models.Product{},
+			&models.User{},
+			&models.Access{},
+			&models.Cart{},
+			&models.Comment{},
+			&models.Like{},
+			&models.Purchase{},
+			&models.Rating{})
+
+		return db
 	}
-
-	db.AutoMigrate(
-		&models.Category{},
-		&models.Product{},
-		&models.User{},
-		&models.Access{},
-		&models.Cart{},
-		&models.Comment{},
-		&models.Like{},
-		&models.Purchase{},
-		&models.Rating{})
-
-	return db
 }
