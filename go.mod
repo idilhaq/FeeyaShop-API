@@ -4,16 +4,16 @@ go 1.25
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/go-sql-driver/mysql v1.6.0
+	github.com/go-sql-driver/mysql v1.7.0
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/joho/godotenv v1.4.0
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2
 	github.com/swaggo/gin-swagger v1.3.2
 	github.com/swaggo/swag v1.7.3
 	golang.org/x/crypto v0.45.0
-	gorm.io/driver/mysql v1.1.2
-	gorm.io/driver/postgres v1.1.2
-	gorm.io/gorm v1.21.16
+	gorm.io/driver/mysql v1.5.7
+	gorm.io/driver/postgres v1.5.11
+	gorm.io/gorm v1.25.12
 )
 
 require (
@@ -34,16 +34,12 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.20.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
-	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.14.3 // indirect
-	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgproto3/v2 v2.3.3 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgtype v1.14.0 // indirect
-	github.com/jackc/pgx/v4 v4.18.3 // indirect
+	github.com/jackc/pgx/v5 v5.5.5 // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.2 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
@@ -53,10 +49,12 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
+	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sync v0.18.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/tools v0.38.0 // indirect
